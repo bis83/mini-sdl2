@@ -144,6 +144,13 @@
   (:fullscreen-desktop #x00001001)
   (:foreign #x00000800))
 
+(%defstruct color (:value color-value
+                   :pointer color-pointer)
+  (r :uint8)
+  (g :uint8)
+  (b :uint8)
+  (a :uint8))
+
 (%defenum button-state (:value %button-state-value
                         :symbol %button-state-symbol)
   (:released 0)

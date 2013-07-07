@@ -13,7 +13,7 @@ SDL2の代表的な機能をCommon Lispから簡単に利用するための補�
 ###General
     with-sdl2 flags &body body
 SDL2を使用したプログラムを実行する。  
-flagsには、:video :audio :joystick :hapticが有効である。
+flagsには、:video :audio :joystickが有効である。
 
     set-error &rest fmt
 SDLエラーを設定する。  
@@ -56,82 +56,82 @@ loop-event-handlingのループ処理から脱出するフラグを設定する�
 イベントハンドラからイベント情報を取得する。  
 keysにはevent-typeによって異なるキーワード引数が設定される。
 * :window
-    * :event
-    * :timestamp
-    * :window-id
-    * :win-event
-    * :data1
-    * :data2
+    * :event - :window-event
+    * :timestamp - イベントのタイムスタンプ値
+    * :window-id - windowのID
+    * :win-event - WindowEventを識別するシンボル
+    * :data1 - WindowEventのパラメータ
+    * :data2 - WindowEventのパラメータ
 * :keyboard
-    * :event
-    * :timestamp
-    * :window-id
-    * :state
-    * :repeat
-    * :keysym
+    * :event - :keyup または :keydown
+    * :timestamp - イベントのタイムスタンプ値
+    * :window-id - windowのID
+    * :state - :pressed または :released
+    * :repeat - リピート判別値
+    * :keysym - キーの識別シンボル
 * :text-editing
-    * :event
-    * :timestamp
-    * :window-id
-    * :text
-    * :start
-    * :length
+    * :event - :text-editing
+    * :timestamp - イベントのタイムスタンプ値
+    * :window-id - windowのID
+    * :text - 編集中のテキスト
+    * :start - テキスト中の編集開始位置
+    * :length - 編集したテキストの長さ
 * :text-input
-    * :event
-    * :timestamp
-    * :window-id
-    * :text
+    * :event - :text-input
+    * :timestamp - イベントのタイムスタンプ値
+    * :window-id - windowのID
+    * :text - 入力されたテキスト
 * :mouse-motion
-    * :event
-    * :timestamp
-    * :window-id
-    * :state
-    * :x
-    * :y
-    * :xrel
-    * :yrel
+    * :event - :mouse-motion
+    * :timestamp - イベントのタイムスタンプ値
+    * :window-id - windowのID
+    * :state - ボタンの状態
+    * :x - マウスのx座標
+    * :y - マウスのy座標
+    * :xrel - マウスの相対x座標
+    * :yrel - マウスの相対y座標
 * :mouse-button
-    * :event
-    * :timestamp
-    * :window-id
-    * :button
-    * :state
-    * :x
-    * :y
+    * :event - :mouse-button-down または :mouse-button-up
+    * :timestamp - イベントのタイムスタンプ値
+    * :window-id - windowのID
+    * :button - ボタン番号
+    * :state - :pressed または :released
+    * :x - マウスのx位置
+    * :y - マウスのy座標
 * :mouse-wheel
-    * :event
-    * :timestamp
-    * :window-id
-    * :x
-    * :y
+    * :event - :mouse-wheel
+    * :timestamp - イベントのタイムスタンプ値
+    * :window-id - windowのID
+    * :x - マウスのx座標
+    * :y - マウスのy座標
 * :joy-axis
-    * :event
-    * :timestamp
-    * :which
-    * :axis
-    * :value
+    * :event - :joy-axis-motion
+    * :timestamp - イベントのタイムスタンプ値
+    * :which - ジョイスティック番号
+    * :axis - 軸番号
+    * :value - 値
 * :joy-ball
-    * :event
-    * :timestamp
-    * :which
-    * :ball
-    * :xrel
-    * :yrel
+    * :event - :joy-ball-motion
+    * :timestamp - イベントのタイムスタンプ値
+    * :which - ジョイスティック番号
+    * :ball - ボール番号
+    * :xrel - ボールの相対x座標
+    * :yrel - ボールの相対y座標
 * :joy-hat
-    * :event
-    * :timestamp
-    * :which
-    * :hat
-    * :value
+    * :event - :joy-hat-motion
+    * :timestamp - イベントのタイムスタンプ値
+    * :which - ジョイスティック番号
+    * :hat - ハット番号
+    * :value - 値
 * :joy-button
-    * :event
-    * :timestamp
-    * :which
-    * :button
-    * :state
+    * :event - :joy-button-down または :joy-buttn-up
+    * :timestamp - イベントのタイムスタンプ値
+    * :which - ジョイスティック番号
+    * :button - ボタン番号
+    * :state - :pressed または :released
 * :quit
-    * :event
-    * :timestamp
+    * :event - :quit
+    * :timestamp - イベントのタイムスタンプ値
 
 ###Video (Required init with :video)
     with-window (name &key title x y w h flags) &body body
@@ -165,6 +165,9 @@ imageをカレントのGLコンテキストにテクスチャとしてバイン�
 pathnameのフォント(.ttf)をロードする。  
 fontオブジェクトまたは読み込みに失敗した場合はnilが返る。
 
+    close-font font
+fontオブジェクトを解放する。
+
     font-attribute attr font (&rest value)
 fontのスタイルを取得・設定する。  
 attrには:style :outline :hinting :kerningが指定できる。  
@@ -182,12 +185,10 @@ valueが指定された場合は、新しい属性としてvalueが設定され�
     * :none
 * :kerning - tまたはnil
 
-    close-font font
-fontオブジェクトを解放する。
-
-    render-text render-mode font text color
+    render-text render-mode font text &optional fr fg fb fa br bg bb ba
 fontからレンダリング結果のimageオブジェクトを生成する。  
-render-modeは:solid :shaded :blendedが指定できる。
+render-modeは:solid :shaded :blendedが指定できる。  
+fr-faはフォアカラー、br-baはバックカラーの各要素(0-255)となる。
 
 ###Input (Required init with :joystick)
     num-joysticks

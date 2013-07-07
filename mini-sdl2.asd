@@ -5,7 +5,7 @@
 (in-package :mini-sdl2-asd)
 
 (asdf:defsystem :mini-sdl2
-  :version "1.0"
+  :version "0.1"
   :author "BIS"
   :license "zlib license"
   :depends-on (:cffi)
@@ -14,9 +14,9 @@
                (:module "src"
                 :depends-on ("wrapper")
                 :components ((:file "sdl2")
-                             (:file "video")
-                             (:file "audio")
-                             (:file "input")
-                             (:file "event"))))
+                             (:file "video" :depends-on ("sdl2"))
+                             (:file "audio" :depends-on ("sdl2"))
+                             (:file "input" :depends-on ("sdl2"))
+                             (:file "event" :depends-on ("sdl2")))))
   :description "Binding for a small part of SDL2.")
 

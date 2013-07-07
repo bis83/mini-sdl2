@@ -12,6 +12,7 @@
     (format t "Num Joysticks : ~A~%" (num-joysticks))
     (joystick-open 0)
     (if (joystick-opened 0) (format t "JoystickOpened~%"))
+    (format t "~A~%" (list-active-joysticks))
     (loop-event-handling event-catch
       :window
       (with-event-slot :window (event-catch :window-id id

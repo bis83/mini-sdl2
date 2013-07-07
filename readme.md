@@ -193,16 +193,20 @@ render-modeは:solid :shaded :blendedが指定できる。
     num-joysticks
 認識されているジョイスティックデバイスの個数を取得する。
 
-    open-joystick index
+    joystick-style index
+ジョイスティックの構造を取得する。  
+返り値はリストで、(name num-axes num-balls num-buttons num-hats)を表す。
+
+    joystick-open index
 ジョイスティックを使用開始する。
 
-    close-joystick index
+    joystick-close index
 ジョイスティックの使用を終了する。
 
     joystick-opended index
 指定した番号のジョイスティックを使用しているか判定する。
 
-    list-opened-joysticks
+    list-active-joysticks
 使用中のジョイスティックIDのリストを取得する。
 
 ###Audio (Required init with :audio)

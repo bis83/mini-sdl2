@@ -31,18 +31,23 @@
   (unless (%get-active-joystick index)
     (push (%joystick-open index) *joystick-list*)))
 
-(defun joystick-opened (index)
-  (%get-active-joystick index))
-
 (defun joystick-close (index)
   (let ((joy (%get-active-joystick index)))
     (when joy (%joystick-close joy)
               (remove joy *joystick-list*))))
+
+(defun joystick-opened (index)
+  (if (%get-active-joystick index) t))
+
+(defun list-active-joysticks ()
+  (loop for joy in *joystick-list*
+    collect (%joystick-index joy)))
 
 (export
   '(num-joysticks
     joystick-style
     joystick-open
     joystick-opened
-    joystick-close))
+    joystick-close
+    list-active-joysticks))
 

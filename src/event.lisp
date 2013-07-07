@@ -48,14 +48,6 @@
 (defvar *leave-event-loop-flag*)
 (defun leave-event-loop () (setf *leave-event-loop-flag* t))
 
-(defun %list-slot (&rest args)
-  (loop for sym in args by #'cddr
-        for frm in (cdr args) by #'cddr
-        when sym collect (list sym frm)))
-
-(defun %make-let (body &rest bindlist)
-  `(let ,(apply #'%list-slot bindlist) ,@body))
-
 ;;; With-Event
 
 (defmacro with-event-slot (event-type spec &body body)

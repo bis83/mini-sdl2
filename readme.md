@@ -1,32 +1,55 @@
 #Mini-SDL2
-SDL2の代表的な機能をCommon Lispから簡単に利用するための補助ライブラリ。
+SDL2の代表的な機能をCommon Lispから簡単に利用するための補助ライブラリ。  
 (SDL2のAPIラッパーではありません)
 
-#Install
+##Install
 
-##Required
+###Required
 [Common Lisp] CFFI
 [OS] SDL2, SDL2\_image, SDL2\_ttf, SDL2\_mixer
 
-#Usage
-##General
+##Usage
+###General
     with-sdl2 flags &body body
-SDL2を使用したプログラムを実行する。
+SDL2を使用したプログラムを実行する。  
 flagsには、:video :audio :joystick :hapticが有効である。
 
-##Event-Handling
-    loop-event-handling &optional handle &key window keyboard text-editing text-input mouse-motion mouse-button mouse-wheel joy-axis joy-ball joy-button joy-device quit idle
-イベントハンドリングループを開始する。
-handleはループ中にイベント情報を受け取るハンドラが束縛される変数名である。
-各キーワードには、キーワードが示すイベント発生時に実行する式を記述する。 
+    set-error &rest fmt
+SDLエラーを設定する。  
+fmtにはcl:formatに順ずる。
+
+    get-error
+    clear-error
+
+###Event-Handling
+    loop-event-handling &optional handle
+                        &key window
+                             keyboard
+                             text-editing
+                             text-input
+                             mouse-motion
+                             mouse-button
+                             mouse-wheel
+                             joy-axis
+                             joy-ball
+                             joy-button
+                             joy-device
+                             quit
+                             idle
+イベントハンドリングループを開始する。  
+handleはループ中にイベント情報を受け取るハンドラが束縛される変数名である。  
+各キーワードには、キーワードが示すイベント発生時に実行する式を記述する。   
 idleはイベントが存在しないときに実行される式である。
 
+    quit-request
+quitイベントをイベントキューに追加する。
+
     leave-event-loop
-loop-event-handlingのループ処理から脱出するフラグを設定する。
+loop-event-handlingのループ処理から脱出するフラグを設定する。  
 次のイベントポーリング前にループ処理は終了する。
 
     with-event-slot event-type (handle &rest keys) &body body
-イベントハンドラからイベント情報を取得する。
+イベントハンドラからイベント情報を取得する。  
 keysにはevent-typeによって異なるキーワード引数が設定される。
 * :window
     * :event
@@ -106,14 +129,14 @@ keysにはevent-typeによって異なるキーワード引数が設定される
     * :event
     * :timestamp
 
-##Window
+###Video (Required init with :video)
     with-window (name &key title x y w h flags) &body body
-SDL2ウィンドウを生成する。with-sdl2で:videoフラグありでなければ動作しない。
+SDL2ウィンドウを生成する。
 
     with-context name win &body body
 SDL2ウィンドウに対応したGL描画コンテキストを生成する。
 
-    with-window-and-contexti (win ctx &key title x y w h flags) &body body
+    with-window-and-context (win ctx &key title x y w h flags) &body body
 SDL2ウィンドウとGL描画コンテキストを生成する。
 
     begin-frame win ctx &body body
@@ -127,11 +150,12 @@ imageオブジェクトまたは読み込みに失敗した場合はnilが返る
 
     close-image image
 imageオブジェクトを解放する。
+bind-gltexでバインディングしたgl-textureは自動的に解放されない。
 
     bind-gltex image
 imageをカレントのGLコンテキストにテクスチャとしてバインドする。
 バインド成功した場合、返り値はGLのテクスチャ番号、失敗した場合はnilが返る。
-初回のバインド時にはgen-textureが発生する可能性が高い。
+初回のバインド時にはgen-textureが発生する。
 
     load-font pathname ptsize index
 pathnameのフォント(.ttf)をロードする。
@@ -161,7 +185,7 @@ fontオブジェクトを解放する。
 fontからレンダリング結果のimageオブジェクトを生成する。
 render-modeは:solid :shaded :blendedが指定できる。
 
-##Input
+###Input (Required init with :joystick)
     num-joysticks
 認識されているジョイスティックデバイスの個数を取得する。
 
@@ -177,7 +201,7 @@ render-modeは:solid :shaded :blendedが指定できる。
     list-opened-joysticks
 使用中のジョイスティックIDのリストを取得する。
 
-##Audio
+###Audio (Required init with :audio)
     with-audio (&key freqency format channels chunksize) &body body
 オーディオデバイスの使用を開始する。
 
@@ -240,10 +264,15 @@ musicオブジェクトを解放する。
     playing-music
 音楽再生中か判別する。
 
-#Sample Code
+##Sample Code
     ; On Window Event
     (defun on-window-event (event window)
-      (with-event-slot :window (event :event-type evtype :timestamp time :window-id id :event winev :data1 d1 :data2 d2)
+      (with-event-slot :window (event :event-type evtype
+                                      :timestamp time
+                                      :window-id id
+                                      :event winev
+                                      :data1 d1
+                                      :data2 d2)
         (format t "~S~%" (list evtype time id winev d1 d2))))
 
     ; Start SDL2 Program

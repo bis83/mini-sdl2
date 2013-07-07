@@ -11,17 +11,35 @@
 (defcfun ("SDL_RWClose" %rw-close) :int (context :pointer))
 (defcfun ("SDL_JoystickEventState" %joystick-event-state) :int (state :int))
 
+(defcfun ("IMG_Init" %img-init) :int (flags :int))
+(defcfun ("IMG_Quit" %img-quit) :void)
+(defcfun ("TTF_Init" %ttf-init) :int)
+(defcfun ("TTF_Quit" %ttf-quit) :void)
+(defcfun ("Mix_Init" %mix-init) :int (flags :int))
+(defcfun ("Mix_Quit" %mix-quit) :void)
+
 (defmacro with-sdl2 (flags &body body)
   `(unwind-protect
       ,(append
-          (%list-no-nil
-            'progn
-            '(%set-main-ready)
-            `(check-error (%init ,(%init-flags-value flags)))
-            (if (member :joystick flags)
-              `(%joystick-event-state ,(%event-state-value :enable))))
-          body)
-      (%quit)))
+        (%list-no-nil
+          'progn
+          '(%set-main-ready)
+          `(check-error (%init ,(%init-flags-value flags)))
+          (if (member :video flags)
+            `(%img-init ,(%img-init-flags-value '(:jpg :png :tif))))
+          (if (member :video flags)
+            `(%ttf-init))
+          (if (member :audio flags)
+            `(%mix-init ,(%mix-init-flags-value '(:flac :mod :mp3 :ogg))))
+          (if (member :joystick flags)
+            `(%joystick-event-state ,(%event-state-value :enable))))
+        body)
+      ,(%list-no-nil
+        'progn
+        (if (member :video flags) '(%img-quit))
+        (if (member :video flags) '(%ttf-quit))
+        (if (member :audio flags) '(%mix-quit))
+        '(%quit))))
 
 (defun check-error (errno)
   (when (< errno 0)

@@ -77,8 +77,6 @@
               (foreign-bitfield-value ',name ,val)))))
       `(defbitfield ,name ,@body))))
 
-;;; Wrapper SDL2 Struct, Enum, and Bitfield
-
 (%defbitfield init-flags (:value %init-flags-value
                           :symbols %init-flags-symbols)
   (:audio    #x00000010)
@@ -338,4 +336,34 @@
   (:jbutton joy-button-event)
   (:quit quit-event)
   (:padding :uint8 :count 56))
+
+(%defbitfield img-init-flags (:value %img-init-flags-value
+                              :symbols %img-init-flags-symbols)
+  (:jpg  #x00000001)
+  (:png  #x00000002)
+  (:tif  #x00000004)
+  (:webp #x00000008))
+
+(%defbitfield ttf-style-flags (:value %ttf-style-flags-value
+                               :symbols %ttf-style-flags-symbols)
+  (:bold          #x01)
+  (:italic        #x02)
+  (:underline     #x04)
+  (:strikethrough #x08))
+
+(%defenum ttf-hinting (:value %ttf-hinting-value
+                       :symbol %ttf-hinting-symbol)
+  (:normal 0)
+  (:light 1)
+  (:mono 2)
+  (:none 3))
+
+(%defbitfield mix-init-flags (:value %mix-init-flags-value
+                              :symbols %mix-init-flags-symbols)
+  (:flac       #x00000001)
+  (:mod        #x00000002)
+  (:modplug    #x00000004)
+  (:mp3        #x00000008)
+  (:ogg        #x00000010)
+  (:fluidsynth #x00000020))
 

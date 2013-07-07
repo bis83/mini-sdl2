@@ -53,148 +53,118 @@
         for frm in (cdr args) by #'cddr
         when sym collect (list sym frm)))
 
+(defun %make-let (body &rest bindlist)
+  `(let ,(apply #'%list-slot bindlist) ,@body))
+
 ;;; With-Event
 
-(defmacro with-window-event (spec &body body)
-  (destructuring-bind (ev &key event-type timestamp window-id event data1 data2) spec
-    `(let ,(%list-slot
-            event-type `(%event-type-symbol (%window-event-value ,ev :type))
-            timestamp `(%window-event-value ,ev :timestamp)
-            window-id `(%window-event-value ,ev :window-id)
-            event `(%window-event-type-symbol (%window-event-value ,ev :event))
-            data1 `(%window-event-value ,ev :data1)
-            data2 `(%window-event-value ,ev :data2))
-      ,@body)))
-
-(defmacro with-keyboard-event (spec &body body)
-  (destructuring-bind (ev &key event-type timestamp window-id state repeat keysym) spec
-    `(let ,(%list-slot
-            event-type `(%event-type-symbol (%keyboard-event-value ,ev :type))
-            timestamp `(%keyboard-event-value ,ev :timestamp)
-            window-id `(%keyboard-event-value ,ev :window-id)
-            state `(%keyboard-event-value ,ev :state)
-            repeat `(%keyboard-event-value ,ev :repeat)
-            keysym `(%keysym-value (%keyboard-event-pointer ,ev :keysym) :keycode))
-      ,@body)))
-
-(defmacro with-text-editing-event (spec &body body)
-  (destructuring-bind (ev &key event-type timestamp window-id text start length) spec
-    `(let ,(%list-slot
-            event-type `(%event-type-symbol (%text-editing-event-value ,ev :type))
-            timestamp `(%text-editing-event-value ,ev :timestamp)
-            window-id `(%text-editing-event-value ,ev :window-id)
-            text `(foreign-string-to-lisp (%text-editing-event-value ,ev :text))
-            start `(%text-editing-event-value ,ev :start)
-            length `(%text-editing-event-value ,ev :length))
-      ,@body)))
-
-(defmacro with-text-input-event (spec &body body)
-  (destructuring-bind (ev &key event-type timestamp window-id text) spec
-    `(let ,(%list-slot
-            event-type `(%event-type-symbol (%text-input-event-value ,ev :type))
-            timestamp `(%text-input-event-value ,ev :timestamp)
-            window-id `(%text-input-event-value ,ev :window-id)
-            text `(foreign-string-to-lisp (%text-input-event-value ,ev :text)))
-      ,@body)))
-
-(defmacro with-mouse-motion-event (spec &body body)
-  (destructuring-bind (ev &key event-type timestamp window-id state x y xrel yrel) spec
-    `(let ,(%list-slot
-            event-type `(%event-type-symbol (%mouse-motion-event-value ,ev :type))
-            timestamp `(%mouse-motion-event-value ,ev :timestamp)
-            window-id `(%mouse-motion-event-value ,ev :window-id)
-            state `(%mouse-button-flags-symbols (%mouse-motion-event-value ,ev :state))
-            x `(%mouse-motion-event-value ,ev :x)
-            y `(%mouse-motion-event-value ,ev :y)
-            xrel `(%mouse-motion-event-value ,ev :xrel)
-            yrel `(%mouse-motion-event-value ,ev :yrel))
-      ,@body)))
-
-(defmacro with-mouse-button-event (spec &body body)
-  (destructuring-bind (ev &key event-type timestamp window-id button state x y) spec
-    `(let ,(%list-slot
-            event-type `(%event-type-symbol (%mouse-button-event-value ,ev :type))
-            timestamp `(%mouse-button-event-value ,ev :timestamp)
-            window-id `(%mouse-button-event-value ,ev :window-id)
-            button `(%mouse-button-type-symbol (%mouse-button-event-value ,ev :button))
-            state `(%button-state-symbol (%mouse-button-event-value ,ev :state))
-            x `(%mouse-button-event-value ,ev :x)
-            y `(%mouse-button-event-value ,ev :y))
-      ,@body)))
-
-(defmacro with-mouse-wheel-event (spec &body body)
-  (destructuring-bind (ev &key event-type timestamp window-id x y) spec
-    `(let ,(%list-slot
-            event-type `(%event-type-symbol (%mouse-wheel-event-value ,ev :type))
-            timestamp `(%mouse-wheel-event-value ,ev :timestamp)
-            window-id `(%mouse-wheel-event-value ,ev :window-id)
-            x `(%mouse-wheel-event-value ,ev :x)
-            y `(%mouse-wheel-event-value ,ev :y))
-      ,@body)))
-
-(defmacro with-joy-axis-event (spec &body body)
-  (destructuring-bind (ev &key event-type timestamp which axis value) spec
-    `(let ,(%list-slot
-            event-type `(%event-type-symbol (%joy-axis-event-value ,ev :type))
-            timestamp `(%joy-axis-event-value ,ev :timestamp)
-            which `(%joy-axis-event-value ,ev :which)
-            axis `(%joy-axis-event-value ,ev :axis)
-            value `(%joy-axis-event-value ,ev :value))
-      ,@body)))
-
-(defmacro with-joy-ball-event (spec &body body)
-  (destructuring-bind (ev &key event-type timestamp which ball xrel yrel) spec
-    `(let ,(%list-slot
-            event-type `(%event-type-symbol (%joy-ball-event-value ,ev :type))
-            timestamp `(%joy-ball-event-value ,ev :timestamp)
-            which `(%joy-ball-event-value ,ev :which)
-            ball `(%joy-ball-event-value ,ev :ball)
-            xrel `(%joy-ball-event-value ,ev :xrel)
-            yrel `(%joy-ball-event-value ,ev :yrel))
-      ,@body)))
-
-(defmacro with-joy-hat-event (spec &body body)
-  (destructuring-bind (ev &key event-type timestamp which hat value) spec
-    `(let ,(%list-slot
-            event-type `(%event-type-symbol (%joy-hat-event-value ,ev :type))
-            timestamp `(%joy-hat-event-value ,ev :timestamp)
-            which `(%joy-hat-event-value ,ev :which)
-            hat `(%joy-hat-event-value ,ev :hat)
-            value `(%hat-position-symbol (%joy-hat-event-value ,ev :value)))
-      ,@body))) 
-
-(defmacro with-joy-button-event (spec &body body)
-  (destructuring-bind (ev &key event-type timestamp which button state) spec
-    `(let ,(%list-slot
-            event-type `(%event-type-symbol (%joy-button-event-value ,ev :type))
-            timestamp `(%joy-button-event-value ,ev :timestamp)
-            which `(%joy-button-event-value ,ev :which)
-            button `(%joy-button-event-value ,ev :button)
-            state `(%button-state-symbol (%joy-button-event-value ,ev :state)))
-      ,@body))) 
-
-(defmacro with-quit-event (spec &body body)
-  (destructuring-bind (ev &key event-type timestamp) spec
-    `(let ,(%list-slot
-            event-type `(%event-type-symbol (%quit-event-value ,ev :type))
-            timestamp `(%joy-quit-event-value ,ev :timestamp))
-      ,@body)))
+(defmacro with-event-slot (event-type spec &body body)
+  (case event-type
+    ((:window)
+      (destructuring-bind (handle &key event timestamp window-id win-event data1 data2) spec
+        (%make-let body
+                   event `(%event-type-symbol (%window-event-value ,handle :type))
+                   timestamp `(%window-event-value ,handle :timestamp)
+                   window-id `(%window-event-value ,handle :window-id)
+                   win-event `(%window-event-type-symbol (%window-event-value ,handle :event))
+                   data1 `(%window-event-value ,handle :data1)
+                   data2 `(%window-event-value ,handle :data2))))
+    ((:keyboard)
+      (destructuring-bind (handle &key event timestamp window-id state repeat keysym) spec
+        (%make-let body
+                   event `(%event-type-symbol (%keyboard-event-value ,handle :type))
+                   timestamp `(%keyboard-event-value ,handle :timestamp)
+                   window-id `(%keyboard-event-value ,handle :window-id)
+                   state `(%keyboard-event-value ,handle :state)
+                   repeat `(%keyboard-event-value ,handle :repeat)
+                   keysym `(%keysym-value (%keyboard-event-pointer ,handle :keysym) :keycode))))
+    ((:text-editing)
+      (destructuring-bind (handle &key event timestamp window-id text start length) spec
+        (%make-let body
+                   event `(%event-type-symbol (%text-editing-event-value ,handle :type))
+                   timestamp `(%text-editing-event-value ,handle :timestamp)
+                   window-id `(%text-editing-event-value ,handle :window-id)
+                   text `(foreign-string-to-lisp (%text-editing-event-value ,handle :text))
+                   start `(%text-editing-event-value ,handle :start)
+                   length `(%text-editing-event-value ,handle :length))))
+    ((:text-input)
+      (destructuring-bind (handle &key event timestamp window-id text) spec
+        (%make-let body
+                   event `(%event-type-symbol (%text-input-event-value ,handle :type))
+                   timestamp `(%text-input-event-value ,handle :timestamp)
+                   window-id `(%text-input-event-value ,handle :window-id)
+                   text `(foreign-string-to-lisp (%text-input-event-value ,handle :text)))))
+    ((:mouse-motion)
+      (destructuring-bind (handle &key event timestamp window-id state x y xrel yrel) spec
+        (%make-let body
+                   event `(%event-type-symbol (%mouse-motion-event-value ,handle :type))
+                   timestamp `(%mouse-motion-event-value ,handle :timestamp)
+                   window-id `(%mouse-motion-event-value ,handle :window-id)
+                   state `(%mouse-button-flags-symbols (%mouse-motion-event-value ,handle :state))
+                   x `(%mouse-motion-event-value ,handle :x)
+                   y `(%mouse-motion-event-value ,handle :y)
+                   xrel `(%mouse-motion-event-value ,handle :xrel)
+                   yrel `(%mouse-motion-event-value ,handle :yrel))))
+    ((:mouse-button)
+      (destructuring-bind (handle &key event timestamp window-id button state x y) spec
+        (%make-let body
+                   event `(%event-type-symbol (%mouse-button-event-value ,handle :type))
+                   timestamp `(%mouse-button-event-value ,handle :timestamp)
+                   window-id `(%mouse-button-event-value ,handle :window-id)
+                   button `(%mouse-button-type-symbol (%mouse-button-event-value ,handle :button))
+                   state `(%button-state-symbol (%mouse-button-event-value ,handle :state))
+                   x `(%mouse-button-event-value ,handle :x)
+                   y `(%mouse-button-event-value ,handle :y))))
+    ((:mouse-wheel)
+      (destructuring-bind (handle &key event timestamp window-id x y) spec
+        (%make-let body
+                   event `(%event-type-symbol (%mouse-wheel-event-value ,handle :type))
+                   timestamp `(%mouse-wheel-event-value ,handle :timestamp)
+                   window-id `(%mouse-wheel-event-value ,handle :window-id)
+                   x `(%mouse-wheel-event-value ,handle :x)
+                   y `(%mouse-wheel-event-value ,handle :y))))
+    ((:joy-axis)
+      (destructuring-bind (handle &key event timestamp which axis value) spec
+        (%make-let body
+                   event `(%event-type-symbol (%joy-axis-event-value ,handle :type))
+                   timestamp `(%joy-axis-event-value ,handle :timestamp)
+                   which `(%joy-axis-event-value ,handle :which)
+                   axis `(%joy-axis-event-value ,handle :axis)
+                   value `(%joy-axis-event-value ,handle :value))))
+    ((:joy-ball)
+      (destructuring-bind (handle &key event timestamp which ball xrel yrel) spec
+        (%make-let body
+                   event `(%event-type-symbol (%joy-ball-event-value ,handle :type))
+                   timestamp `(%joy-ball-event-value ,handle :timestamp)
+                   which `(%joy-ball-event-value ,handle :which)
+                   ball `(%joy-ball-event-value ,handle :ball)
+                   xrel `(%joy-ball-event-value ,handle :xrel)
+                   yrel `(%joy-ball-event-value ,handle :yrel))))
+    ((:joy-hat)
+      (destructuring-bind (handle &key event timestamp which hat value) spec
+        (%make-let body
+                   event `(%event-type-symbol (%joy-hat-event-value ,handle :type))
+                   timestamp `(%joy-hat-event-value ,handle :timestamp)
+                   which `(%joy-hat-event-value ,handle :which)
+                   hat `(%joy-hat-event-value ,handle :hat)
+                   value `(%hat-position-symbol (%joy-hat-event-value ,handle :value)))))
+    ((:joy-button)
+      (destructuring-bind (handle &key event timestamp which button state) spec
+        (%make-let body
+                   event `(%event-type-symbol (%joy-button-event-value ,handle :type))
+                   timestamp `(%joy-button-event-value ,handle :timestamp)
+                   which `(%joy-button-event-value ,handle :which)
+                   button `(%joy-button-event-value ,handle :button)
+                   state `(%button-state-symbol (%joy-button-event-value ,handle :state)))))
+    ((:quit)
+      (destructuring-bind (handle &key event timestamp) spec
+        (%make-let body
+                   event-type `(%event-type-symbol (%quit-event-value ,handle :type))
+                   timestamp `(%joy-quit-event-value ,handle :timestamp))))))
 
 (export
   '(quit-request
     loop-event-handling
     leave-event-loop
-    with-window-event
-    with-keyboard-event
-    with-text-editing-event
-    with-text-input-event
-    with-mouse-motion-event
-    with-mouse-button-event
-    with-mouse-wheel-event
-    with-joy-axis-event
-    with-joy-ball-event
-    with-joy-hat-event
-    with-joy-button-event
-    with-joy-device-event
-    with-joy-quit-event))
+    with-event-slot))
 

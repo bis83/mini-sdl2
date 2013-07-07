@@ -133,6 +133,7 @@ keysにはevent-typeによって異なるキーワード引数が設定される
     * :event - :quit
     * :timestamp - イベントのタイムスタンプ値
 
+
 ###Video (Required init with :video)
     with-window (name &key title x y w h flags) &body body
 SDL2ウィンドウを生成する。
@@ -184,6 +185,7 @@ valueが指定された場合は、新しい属性としてvalueが設定され�
     * :mono
     * :none
 * :kerning - tまたはnil
+
 
     render-text render-mode font text &optional fr fg fb fa br bg bb ba
 fontからレンダリング結果のimageオブジェクトを生成する。  

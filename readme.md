@@ -11,48 +11,56 @@ SDL2の代表的な機能をCommon Lispから簡単に利用するための補�
 
 ##Usage
 ###General
-    with-sdl2 flags &body body
+#### with-sdl2
+    sdl2:with-sdl2 flags &body body
 SDL2を使用したプログラムを実行する。  
 flagsには、:video :audio :joystickが有効である。
 
-    set-error &rest fmt
+#### set-error
+    sdl2:set-error &rest fmt
 SDLエラーを設定する。  
 fmtにはcl:formatに順ずる。
 
-    get-error
+#### get-error
+    sdl2:get-error
 SDLエラーを取得する。
 
-    clear-error
+#### clear-error
+    sdl2:clear-error
 SDLエラーをクリアする。
 
 ###Event-Handling
-    loop-event-handling &optional handle
-                        &key window
-                             keyboard
-                             text-editing
-                             text-input
-                             mouse-motion
-                             mouse-button
-                             mouse-wheel
-                             joy-axis
-                             joy-ball
-                             joy-button
-                             joy-device
-                             quit
-                             idle
+#### loop-event-handling
+    sdl2loop-event-handling &optional handle
+                            &key window
+                                 keyboard
+                                 text-editing
+                                 text-input
+                                 mouse-motion
+                                 mouse-button
+                                 mouse-wheel
+                                 joy-axis
+                                 joy-ball
+                                 joy-button
+                                 joy-device
+                                 quit
+                                 idle
 イベントハンドリングループを開始する。  
 handleはループ中にイベント情報を受け取るハンドラが束縛される変数名である。  
 各キーワードには、キーワードが示すイベント発生時に実行する式を記述する。   
 idleはイベントが存在しないときに実行される式である。
 
-    quit-request
+#### quit-request
+    sdl2:quit-request
 quitイベントをイベントキューに追加する。
 
-    leave-event-loop
+#### leave-event-loop
+    sdl2:leave-event-loop
 loop-event-handlingのループ処理から脱出するフラグを設定する。  
 次のイベントポーリング前にループ処理は終了する。
 
-    with-event-slot event-type (handle &rest keys) &body body
+#### with-event-slot
+    sdl2:with-event-slot event-type (handle &rest keys) &body body
 イベントハンドラからイベント情報を取得する。  
 keysにはevent-typeによって異なるキーワード引数が設定される。
 * :window
@@ -132,44 +140,53 @@ keysにはevent-typeによって異なるキーワード引数が設定される
 * :quit
     * :event - :quit
     * :timestamp - イベントのタイムスタンプ値
-<!-- -->
 
 ###Video (Required init with :video)
-    with-window (name &key title x y w h flags) &body body
+#### with-window
+    sdl2:with-window (name &key title x y w h flags) &body body
 SDL2ウィンドウを生成する。
 
-    with-context name win &body body
+####with-context
+    sdl2:with-context name win &body body
 SDL2ウィンドウに対応したGL描画コンテキストを生成する。
 
-    with-window-and-context (win ctx &key title x y w h flags) &body body
+#### with-window-and-context
+    sdl2:with-window-and-context (win ctx &key title x y w h flags) &body body
 SDL2ウィンドウとGL描画コンテキストを生成する。
 
-    begin-frame win ctx &body body
+#### begin-frame
+    sdl2:begin-frame win ctx &body body
 描画フレームを開始する。  
 フレームの開始時にctxがカレントとして設定され、  
 フレームの終了時にwinのバックバッファがスワップされる。
 
-    load-image pathname
+#### load-image
+    sdl2:load-image pathname
 pathnameのイメージフォーマットをロードする。  
 imageオブジェクトまたは読み込みに失敗した場合はnilが返る。
 
-    close-image image
+#### close-image
+    sdl2:close-image image
 imageオブジェクトを解放する。  
 bind-gltexでバインディングしたgl-textureは自動的に解放されない。
 
-    bind-gltex image
+#### bind-gltex
+    sdl2:bind-gltex image
 imageをカレントのGLコンテキストにテクスチャとしてバインドする。  
 バインド成功した場合、返り値はGLのテクスチャ番号、失敗した場合はnilが返る。  
 初回のバインド時にはgen-textureが発生する。
 
-    load-font pathname ptsize index
+#### load-font
+    sdl2:load-font pathname ptsize index
 pathnameのフォント(.ttf)をロードする。  
 fontオブジェクトまたは読み込みに失敗した場合はnilが返る。
 
-    close-font font
+#### close-font
+    sdl2:close-font font
 fontオブジェクトを解放する。
 
-    font-attribute attr font (&rest value)
+#### font-attribute
+    sdl2:font-attribute attr font (&rest value)
 fontのスタイルを取得・設定する。  
 attrには:style :outline :hinting :kerningが指定できる。  
 valueが指定された場合は、新しい属性としてvalueが設定される。
@@ -185,84 +202,102 @@ valueが指定された場合は、新しい属性としてvalueが設定され�
     * :mono
     * :none
 * :kerning - tまたはnil
-<!-- -->
 
-    render-text render-mode font text &optional fr fg fb fa br bg bb ba
+#### render-text
+    sdl2:render-text render-mode font text &optional fr fg fb fa br bg bb ba
 fontからレンダリング結果のimageオブジェクトを生成する。  
 render-modeは:solid :shaded :blendedが指定できる。  
 fr-faはフォアカラー、br-baはバックカラーの各要素(0-255)となる。
 
 ###Input (Required init with :joystick)
-    num-joysticks
+#### num-joysticks
+    sdl2:num-joysticks
 認識されているジョイスティックデバイスの個数を取得する。
 
-    joystick-style index
+#### joystick-style
+    sdl2:joystick-style index
 ジョイスティックの構造を取得する。  
 返り値はリストで、(name num-axes num-balls num-buttons num-hats)を表す。
 
-    joystick-open index
+#### joystick-open
+    sdl2:joystick-open index
 ジョイスティックを使用開始する。
 
-    joystick-close index
+#### joystick-close
+    sdl2:joystick-close index
 ジョイスティックの使用を終了する。
 
-    joystick-opended index
+#### joystick-opened
+    sdl2:joystick-opened index
 指定した番号のジョイスティックを使用しているか判定する。
 
-    list-active-joysticks
+#### list-active-joysticks
+    sdl2:list-active-joysticks
 使用中のジョイスティックIDのリストを取得する。
 
 ###Audio (Required init with :audio)
-    with-audio (&key freqency format channels chunksize) &body body
+#### with-audio
+    sdl2:with-audio (&key freqency format channels chunksize) &body body
 オーディオデバイスの使用を開始する。
 
-    load-wave pathname
+#### load-wave
+    sdl2:load-wave pathname
 pathnameの音声ファイルをロードする。  
 sampleオブジェクトまたは、音声ファイルの読み込みに失敗した場合はnilが返る。
 
-    close-sample sample
+#### close-sample
+    sdl2:close-sample sample
 音声ファイルを解放する。
 
-    load-music pathname
+#### load-music
+    sdl2:load-music pathname
 pathnameから音楽ファイルをロードする。  
 musicオブジェクトまたは読み込みに失敗した場合はnilが返る。
 
-    close-music music
+#### close-music
+    sdl2:close-music music
 musicオブジェクトを解放する。
 
-    channels &optional count
+#### channels
+    sdl2:channels &optional count
 ミキシングのチャンネル数を設定する。  
 countを省略した場合、最大で設定可能なチャンネル数を取得する。
 
-    volume &optional channel-or-music volume
+#### volume
+    sdl2:volume &optional channel-or-music volume
 チャンネルのボリュームを設定する。  
 volumeを省略した場合、ボリューム設定はせずに設定値のみ取得する。  
 channel-or-musicがnilの場合、全てのチャンネルを対象に操作する。  
 channel-or-musicが:musicの場合は、音楽再生のボリュームを設定する。
 
-    play channel-or-music sample-or-music &optional loops ms
+#### play
+    sdl2:play channel-or-music sample-or-music &optional loops ms
 チャンネルにサンプルを割り当てて再生する。  
 msが指定された場合はフェードイン開始する。  
 channel-or-musicがnilの場合、空きチャンネルを自動的に選択する。  
 channel-or-musicが:musicの場合、音楽再生を開始する。
 
-    pause &optional channel-or-music
+#### pause
+    sdl2:pause &optional channel-or-music
 チャンネルの再生を一時停止する。  
 channel-or-musicがnilの場合、全てのチャンネルを一時停止する。  
 channel-or-musicが:musicの場合、音楽再生を一時停止する。
 
-    resume &optional channel-or-music
+#### resume
+    sdl2:resume &optional channel-or-music
 チャンネルの再生を再開する。  
 channel-or-musicがnilの場合、全てのチャンネルを再開する。  
 channel-or-musicが:musicの場合、音楽再生を一時停止する。
 
-    halt &optional channel-or-music ms
+#### halt
+    sdl2:halt &optional channel-or-music ms
 チャンネルの再生を停止する。  
 msが指定された場合はフェードアウト終了する。  
 channel-or-musicがnilの場合、全てのチャンネルを停止する。  
 channel-or-musicが:musicの場合、音楽再生を停止する。
 
-    playing &optional channel-or-music
+#### playing
+    sdl2:playing &optional channel-or-music
 チャンネルが再生中か判別する。  
 channel-or-musicがnilの場合、再生中チャンネル数を計算する。  
 channel-or-musicが:musicの場合、音楽再生中か判別する。

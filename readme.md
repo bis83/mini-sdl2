@@ -231,30 +231,37 @@ musicオブジェクトを解放する。
 ミキシングのチャンネル数を設定する。  
 返り値は実際に用意できたチャンネル数。
 
-    volume channel-or-music volume
+    volume &optional channel-or-music volume
 チャンネルのボリュームを設定する。  
+volumeを省略した場合、ボリューム設定はせずに設定値のみ取得する。  
+channel-or-musicがnilの場合、全てのチャンネルを対象に操作する。  
 channel-or-musicが:musicの場合は、音楽再生のボリュームを設定する。
 
-    play channel-or-music sample-or-music loops ms
+    play channel-or-music sample-or-music &optional loops ms
 チャンネルにサンプルを割り当てて再生する。  
 msが指定された場合はフェードイン開始する。  
+channel-or-musicがnilの場合、空きチャンネルを自動的に選択する。  
 channel-or-musicが:musicの場合、音楽再生を開始する。
 
-    pause channel-or-music
+    pause &optional channel-or-music
 チャンネルの再生を一時停止する。  
+channel-or-musicがnilの場合、全てのチャンネルを一時停止する。  
 channel-or-musicが:musicの場合、音楽再生を一時停止する。
 
-    resume channel-or-music
+    resume &optional channel-or-music
 チャンネルの再生を再開する。  
+channel-or-musicがnilの場合、全てのチャンネルを再開する。  
 channel-or-musicが:musicの場合、音楽再生を一時停止する。
 
-    halt channel-or-music ms
+    halt &optional channel-or-music ms
 チャンネルの再生を停止する。  
 msが指定された場合はフェードアウト終了する。  
+channel-or-musicがnilの場合、全てのチャンネルを停止する。  
 channel-or-musicが:musicの場合、音楽再生を停止する。
 
-    playing channel-or-music
+    playing &optional channel-or-music
 チャンネルが再生中か判別する。  
+channel-or-musicがnilの場合、再生中チャンネル数を計算する。  
 channel-or-musicが:musicの場合、音楽再生中か判別する。
 
 ##Sample Code

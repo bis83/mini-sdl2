@@ -367,3 +367,14 @@
   (:ogg        #x00000010)
   (:fluidsynth #x00000020))
 
+(%defenum audio-format (:value %audio-format-value
+                        :symbols %audio-format-symbol)
+  (:u8 #x0008)
+  (:s8 #x8008)
+  (:u16-lsb #x0010)
+  (:s16-lsb #x8010)
+  (:u16-msb #x1010)
+  (:s16-msb #x9010)
+  (:u16 #x0010)
+  (:s16 #x8010))
+

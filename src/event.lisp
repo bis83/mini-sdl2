@@ -1,9 +1,11 @@
 
 (in-package :mini-sdl2)
 
-(defcfun ("SDL_PollEvent" %poll-event) :int (event :pointer))
+(defcfun ("SDL_PollEvent" %poll-event) :int
+  (event :pointer))
 (defcfun ("SDL_PumpEvents" %pump-events) :void)
-(defcfun ("SDL_PushEvent" %push-event) :int (event :pointer))
+(defcfun ("SDL_PushEvent" %push-event) :int
+  (event :pointer))
 
 ;;; Quit-Request
 

@@ -2,15 +2,24 @@
 (in-package :mini-sdl2)
 
 (defcfun ("SDL_NumJoysticks" %num-joysticks) :int)
-(defcfun ("SDL_JoystickOpen" %joystick-open) :pointer (device-index :int))
-(defcfun ("SDL_JoystickOpened" %joystick-opened) :int (device-index :int))
-(defcfun ("SDL_JoystickClose" %joystick-close) :void (joystick :pointer))
-(defcfun ("SDL_JoystickInstanceID" %joystick-index) :int (joystick :pointer))
-(defcfun ("SDL_JoystickName" %joystick-name) :string (joystick :pointer))
-(defcfun ("SDL_JoystickNumAxes" %joystick-num-axes) :int (joystick :pointer))
-(defcfun ("SDL_JoystickNumBalls" %joystick-num-balls) :int (joystick :pointer))
-(defcfun ("SDL_JoystickNumButtons" %joystick-num-buttons) :int (joystick :pointer))
-(defcfun ("SDL_JoystickNumHats" %joystick-num-hats) :int (joysitck :pointer))
+(defcfun ("SDL_JoystickOpen" %joystick-open) :pointer
+  (device-index :int))
+(defcfun ("SDL_JoystickOpened" %joystick-opened) :int
+  (device-index :int))
+(defcfun ("SDL_JoystickClose" %joystick-close) :void
+  (joystick :pointer))
+(defcfun ("SDL_JoystickInstanceID" %joystick-index) :int
+  (joystick :pointer))
+(defcfun ("SDL_JoystickName" %joystick-name) :string
+  (joystick :pointer))
+(defcfun ("SDL_JoystickNumAxes" %joystick-num-axes) :int
+  (joystick :pointer))
+(defcfun ("SDL_JoystickNumBalls" %joystick-num-balls) :int
+  (joystick :pointer))
+(defcfun ("SDL_JoystickNumButtons" %joystick-num-buttons) :int
+  (joystick :pointer))
+(defcfun ("SDL_JoystickNumHats" %joystick-num-hats) :int
+  (joysitck :pointer))
 
 (defparameter *joystick-list* ())
 

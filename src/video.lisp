@@ -1,17 +1,32 @@
 
 (in-package :mini-sdl2)
 
-(defcfun ("IMG_Init" %img-init) :int (flags :int))
+(defcfun ("IMG_Init" %img-init) :int
+  (flags :int))
 (defcfun ("IMG_Quit" %img-quit) :void)
-(defcfun ("IMG_Load_RW" %img-load) :pointer (src :pointer) (freesrc :int))
-
+(defcfun ("IMG_Load_RW" %img-load) :pointer
+  (src :pointer)
+  (freesrc :int))
 (defcfun ("TTF_Init" %ttf-init) :int)
 (defcfun ("TTF_Quit" %ttf-quit) :void)
-(defcfun ("TTF_OpenFontRW" %ttf-open-font) :pointer (rwop :pointer) (freesrc :int) (ptsize :int))
-(defcfun ("TTF_OpenFontIndexRW" %ttf-open-font-index) :pointer (rwop :pointer) (freesrc :int) (ptsize :int) (index :long))
-(defcfun ("TTF_CloseFont" %ttf-close-font) :void (font :pointer))
+(defcfun ("TTF_OpenFontRW" %ttf-open-font) :pointer
+  (rwop :pointer)
+  (freesrc :int)
+  (ptsize :int))
+(defcfun ("TTF_OpenFontIndexRW" %ttf-open-font-index) :pointer
+  (rwop :pointer)
+  (freesrc :int)
+  (ptsize :int)
+  (index :long))
+(defcfun ("TTF_CloseFont" %ttf-close-font) :void
+  (font :pointer))
 (defcfun ("SDL_CreateWindow" %create-window) :pointer
-  (title :string) (x :int) (y :int) (w :int) (h :int) (flags :uint32))
+  (title :string)
+  (x :int)
+  (y :int)
+  (w :int)
+  (h :int)
+  (flags :uint32))
 (defcfun ("SDL_DestroyWindow" %destroy-window) :void
   (win :pointer))
 (defcfun ("SDL_GL_CreateContext" %create-context) :pointer
@@ -22,7 +37,7 @@
   (window :pointer) (context :pointer))
 (defcfun ("SDL_GL_SwapWindow" %swap-window) :void
   (window :pointer))
-(defcfun ("IMG_LoadRW" %img-load-rw) :pointer
+(defcfun ("IMG_Load_RW" %img-load-rw) :pointer
   (src :pointer)
   (free :int))
 (defcfun ("SDL_FreeSurface" %free-surface) :void
@@ -62,17 +77,21 @@
     `(let ((,name (%create-window ,title ,x ,y ,w ,h ,(%window-flags-value flags))))
       (unwind-protect (progn ,@body)
                       (%destroy-window ,name)))))
+
 (defmacro with-context (name win &body body)
   `(let ((,name (%create-context ,win)))
     (unwind-protect (progn ,@body)
                      (%delete-context ,name))))
+
 (defmacro with-window-and-context (spec &body body)
   (destructuring-bind (win ctx &rest winspec) spec
     `(with-window ,(cons win winspec) (with-context ,ctx ,win ,@body))))
-(defmacro begin-frame (win ctx &body body)
-  `(progn (%make-current ,win ,ctx)
-          ,@body
-          (%swap-window ,win)))
+
+(defmacro begin-frame (spec &body body)
+  (destructuring-bind (win ctx &key no-swap) spec
+    `(progn (%make-current ,win ,ctx)
+            ,@body
+            ,(if no-swap nil `(%swap-window ,win)))))
 
 (defmacro load-image (path)
   (let ((name (gensym)))
@@ -81,9 +100,6 @@
 
 (defmacro close-image (image)
   `(%free-surface ,image))
-
-(defmacro bind-gltex (image)
-  nil)
 
 (defmacro load-font (path size)
   (let ((name (gensym)))
@@ -155,7 +171,6 @@
     begin-frame
     load-image
     close-image
-    bind-gltex
     load-font
     close-font
     font-attribute

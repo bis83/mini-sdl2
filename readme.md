@@ -181,10 +181,11 @@ SDL2ウィンドウに対応したGL描画コンテキストを生成する。
 SDL2ウィンドウとGL描画コンテキストを生成する。
 
 #### begin-frame
-    sdl2:begin-frame win ctx &body body
+    sdl2:begin-frame (win ctx &key no-swap) &body body
 描画フレームを開始する。  
 フレームの開始時にctxがカレントとして設定され、  
-フレームの終了時にwinのバックバッファがスワップされる。
+フレームの終了時にwinのバックバッファがスワップされる。  
+no-swapをtに設定した場合、フレーム終了時にスワップしない。
 
 #### load-image
     sdl2:load-image pathname
@@ -199,8 +200,8 @@ bind-gltexでバインディングしたgl-textureは自動的に解放されな
 #### bind-gltex
     sdl2:bind-gltex image
 imageをカレントのGLコンテキストにテクスチャとしてバインドする。  
-バインド成功した場合、返り値はGLのテクスチャ番号、失敗した場合はnilが返る。  
-初回のバインド時にはgen-textureが発生する。
+GLコンテキストを利用するため、begin-frame内で呼び出さなければならない。  
+返り値はGLテクスチャのハンドル番号。
 
 #### load-font
     sdl2:load-font pathname ptsize index

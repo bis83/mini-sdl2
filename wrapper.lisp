@@ -144,13 +144,6 @@
   (:fullscreen-desktop #x00001001)
   (:foreign #x00000800))
 
-(%defstruct color (:value color-value
-                   :pointer color-pointer)
-  (r :uint8)
-  (g :uint8)
-  (b :uint8)
-  (a :uint8))
-
 (%defenum button-state (:value %button-state-value
                         :symbol %button-state-symbol)
   (:released 0)
@@ -343,6 +336,56 @@
   (:jbutton joy-button-event)
   (:quit quit-event)
   (:padding :uint8 :count 56))
+
+(%defstruct color (:value color-value
+                   :pointer color-pointer)
+  (r :uint8)
+  (g :uint8)
+  (b :uint8)
+  (a :uint8))
+
+(%defstruct rect (:value %rect-value
+                  :pointer %rect-pointer)
+  (:x :int)
+  (:y :int)
+  (:w :int)
+  (:h :int))
+
+(%defstruct pixel-format (:value %pixel-format-value
+                          :pointer %pixel-format-pointer)
+  (:format :uint32)
+  (:palette :pointer)
+  (:bits-per-pixel :uint8)
+  (:bytes-per-pixel :uint8)
+  (:rmask :uint32)
+  (:gmask :uint32)
+  (:bmask :uint32)
+  (:amask :uint32)
+  (:rloss :uint8)
+  (:gloss :uint8)
+  (:bloss :uint8)
+  (:aloss :uint8)
+  (:rshift :uint8)
+  (:gshift :uint8)
+  (:bshift :uint8)
+  (:ashift :uint8)
+  (:refcount :int)
+  (:next :pointer))
+
+(%defstruct surface (:value %surface-value
+                     :pointer %surface-pointer)
+  (:flags :uint32)
+  (:format :pointer)
+  (:w :int)
+  (:h :int)
+  (:pitch :int)
+  (:pixels :pointer)
+  (:userdata :pointer)
+  (:locked :int)
+  (:lock-data :pointer)
+  (:clip-rect (:struct rect))
+  (:map :pointer)
+  (:refcount :int))
 
 (%defbitfield img-init-flags (:value %img-init-flags-value
                               :symbols %img-init-flags-symbols)

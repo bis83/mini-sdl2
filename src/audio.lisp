@@ -1,29 +1,63 @@
 
 (in-package :mini-sdl2)
 
-(defcfun ("Mix_OpenAudio" %mix-open-audio) :int (freq :int) (format :uint16) (channels :int) (chunksize :int))
+(defcfun ("Mix_OpenAudio" %mix-open-audio) :int
+  (freq :int)
+  (format :uint16)
+  (channels :int)
+  (chunksize :int))
 (defcfun ("Mix_CloseAudio" %mix-close-audio) :void)
-(defcfun ("Mix_LoadWAV_RW" %mix-load-wav-rw) :pointer (src :pointer) (free :int))
-(defcfun ("Mix_FreeChunk" %mix-free-chunk) :void (chunk :pointer))
-(defcfun ("Mix_LoadMUS" %mix-load-mus) :pointer (filename :string))
-(defcfun ("Mix_FreeMusic" %mix-free-music) :void (music :pointer))
-(defcfun ("Mix_AllocateChannels" %mix-allocate-channels) :int (channels :int))
-(defcfun ("Mix_VolumeMusic" %mix-volume-music) :int (volume :int))
-(defcfun ("Mix_Volume" %mix-volume) :int (channel :int) (volume :int))
-(defcfun ("Mix_FadeInMusic" %mix-fade-in-music) :int (music :pointer) (loops :int) (ms :int))
-(defcfun ("Mix_PlayMusic" %mix-play-music) :int (music :pointer) (loops :int))
-(defcfun ("Mix_FadeInChannelTimed" %mix-fade-in-channel) :int (channel :int) (chunk :pointer) (loops :int) (ms :int) (ticks :int))
-(defcfun ("Mix_PlayChannelTimed" %mix-play-channel) :int (channel :int) (chunk :pointer) (loops :int) (ticks :int))
+(defcfun ("Mix_LoadWAV_RW" %mix-load-wav-rw) :pointer
+  (src :pointer)
+  (free :int))
+(defcfun ("Mix_FreeChunk" %mix-free-chunk) :void
+  (chunk :pointer))
+(defcfun ("Mix_LoadMUS" %mix-load-mus) :pointer
+  (filename :string))
+(defcfun ("Mix_FreeMusic" %mix-free-music) :void
+  (music :pointer))
+(defcfun ("Mix_AllocateChannels" %mix-allocate-channels) :int
+  (channels :int))
+(defcfun ("Mix_VolumeMusic" %mix-volume-music) :int
+  (volume :int))
+(defcfun ("Mix_Volume" %mix-volume) :int
+  (channel :int)
+  (volume :int))
+(defcfun ("Mix_FadeInMusic" %mix-fade-in-music) :int
+  (music :pointer)
+  (loops :int)
+  (ms :int))
+(defcfun ("Mix_PlayMusic" %mix-play-music) :int
+  (music :pointer)
+  (loops :int))
+(defcfun ("Mix_FadeInChannelTimed" %mix-fade-in-channel) :int
+  (channel :int)
+  (chunk :pointer)
+  (loops :int)
+  (ms :int)
+  (ticks :int))
+(defcfun ("Mix_PlayChannelTimed" %mix-play-channel) :int
+  (channel :int)
+  (chunk :pointer)
+  (loops :int)
+  (ticks :int))
 (defcfun ("Mix_PauseMusic" %mix-pause-music) :void)
-(defcfun ("Mix_Pause" %mix-pause) :void (channel :int))
+(defcfun ("Mix_Pause" %mix-pause) :void
+  (channel :int))
 (defcfun ("Mix_ResumeMusic" %mix-resume-music) :void)
-(defcfun ("Mix_Resume" %mix-resume) :void (channel :int))
-(defcfun ("Mix_FadeOutMusic" %mix-fade-out-music) :int (ms :int))
+(defcfun ("Mix_Resume" %mix-resume) :void
+  (channel :int))
+(defcfun ("Mix_FadeOutMusic" %mix-fade-out-music) :int
+  (ms :int))
 (defcfun ("Mix_HaltMusic" %mix-halt-music) :int)
-(defcfun ("Mix_FadeOutChannel" %mix-fade-out-channel) :int (channel :int) (ms :int))
-(defcfun ("Mix_HaltChannel" %mix-halt-channel) :int (channel :int))
+(defcfun ("Mix_FadeOutChannel" %mix-fade-out-channel) :int
+  (channel :int)
+  (ms :int))
+(defcfun ("Mix_HaltChannel" %mix-halt-channel) :int
+  (channel :int))
 (defcfun ("Mix_PlayingMusic" %mix-playing-music) :boolean)
-(defcfun ("Mix_Playing" %mix-playing) :int (channel :int))
+(defcfun ("Mix_Playing" %mix-playing) :int
+  (channel :int))
 
 (defmacro with-audio (spec &body body)
   (destructuring-bind (&key (frequency 22050) (format :s16) (channels 2) (chunksize 4096)) spec

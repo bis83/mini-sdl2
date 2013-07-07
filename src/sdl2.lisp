@@ -2,20 +2,28 @@
 (in-package :mini-sdl2)
 
 (defcfun ("SDL_SetMainReady" %set-main-ready) :void)
-(defcfun ("SDL_Init" %init) :int (flags :uint32))
+(defcfun ("SDL_Init" %init) :int
+  (flags :uint32))
 (defcfun ("SDL_Quit" %quit) :void)
 (defcfun ("SDL_GetError" %get-error) :string)
-(defcfun ("SDL_SetError" %set-error) :int (fmt :string) &rest)
+(defcfun ("SDL_SetError" %set-error) :int
+  (fmt :string)
+  &rest)
 (defcfun ("SDL_ClearError" %clear-error) :void)
-(defcfun ("SDL_RWFromFile" %rw-from-file) :pointer (filename :string) (mode :string))
-(defcfun ("SDL_FreeRW" %rw-close) :int (context :pointer))
-(defcfun ("SDL_JoystickEventState" %joystick-event-state) :int (state :int))
-
-(defcfun ("IMG_Init" %img-init) :int (flags :int))
+(defcfun ("SDL_RWFromFile" %rw-from-file) :pointer
+  (filename :string)
+  (mode :string))
+(defcfun ("SDL_FreeRW" %rw-close) :int
+  (context :pointer))
+(defcfun ("SDL_JoystickEventState" %joystick-event-state) :int
+  (state :int))
+(defcfun ("IMG_Init" %img-init) :int
+  (flags :int))
 (defcfun ("IMG_Quit" %img-quit) :void)
 (defcfun ("TTF_Init" %ttf-init) :int)
 (defcfun ("TTF_Quit" %ttf-quit) :void)
-(defcfun ("Mix_Init" %mix-init) :int (flags :int))
+(defcfun ("Mix_Init" %mix-init) :int
+  (flags :int))
 (defcfun ("Mix_Quit" %mix-quit) :void)
 
 (defmacro with-sdl2 (flags &body body)

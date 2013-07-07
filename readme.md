@@ -227,9 +227,9 @@ musicオブジェクトまたは読み込みに失敗した場合はnilが返る
     close-music music
 musicオブジェクトを解放する。
 
-    channels count
+    channels &optional count
 ミキシングのチャンネル数を設定する。  
-返り値は実際に用意できたチャンネル数。
+countを省略した場合、最大で設定可能なチャンネル数を取得する。
 
     volume &optional channel-or-music volume
 チャンネルのボリュームを設定する。  

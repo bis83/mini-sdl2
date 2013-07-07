@@ -368,7 +368,7 @@
   (:fluidsynth #x00000020))
 
 (%defenum audio-format (:value %audio-format-value
-                        :symbols %audio-format-symbol)
+                        :symbol %audio-format-symbol)
   (:u8 #x0008)
   (:s8 #x8008)
   (:u16-lsb #x0010)

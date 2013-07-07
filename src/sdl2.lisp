@@ -8,7 +8,7 @@
 (defcfun ("SDL_SetError" %set-error) :int (fmt :string) &rest)
 (defcfun ("SDL_ClearError" %clear-error) :void)
 (defcfun ("SDL_RWFromFile" %rw-from-file) :pointer (filename :string) (mode :string))
-(defcfun ("SDL_RWClose" %rw-close) :int (context :pointer))
+(defcfun ("SDL_FreeRW" %rw-close) :int (context :pointer))
 (defcfun ("SDL_JoystickEventState" %joystick-event-state) :int (state :int))
 
 (defcfun ("IMG_Init" %img-init) :int (flags :int))
@@ -62,9 +62,12 @@
 
 (defmacro %with-rbop-from-file (spec &body body)
   (destructuring-bind (name path) spec
-    `(let ((,name (%rw-from-file (translate-logical-pathname ,path) "rb")))
+    `(let ((,name (%rw-from-file (namestring (translate-logical-pathname ,path)) "rb")))
       (unwind-protect (progn ,@body)
-                      (%rm-close ,name)))))
+                      (%rw-close ,name)))))
+
+(defun %null-pointer-to-nil (val)
+  (if (null-pointer-p val) nil val))
 
 (export
   '(with-sdl2

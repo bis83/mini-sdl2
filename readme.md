@@ -6,6 +6,7 @@ SDL2の代表的な機能をCommon Lispから簡単に利用するための補�
 
 ###Required
 [Common Lisp] CFFI
+
 [OS] SDL2, SDL2\_image, SDL2\_ttf, SDL2\_mixer
 
 ##Usage
@@ -19,7 +20,10 @@ SDLエラーを設定する。
 fmtにはcl:formatに順ずる。
 
     get-error
+SDLエラーを取得する。
+
     clear-error
+SDLエラーをクリアする。
 
 ###Event-Handling
     loop-event-handling &optional handle
@@ -140,30 +144,30 @@ SDL2ウィンドウに対応したGL描画コンテキストを生成する。
 SDL2ウィンドウとGL描画コンテキストを生成する。
 
     begin-frame win ctx &body body
-描画フレームを開始する。
-フレームの開始時にctxがカレントとして設定され、
+描画フレームを開始する。  
+フレームの開始時にctxがカレントとして設定され、  
 フレームの終了時にwinのバックバッファがスワップされる。
 
     load-image pathname
-pathnameのイメージフォーマットをロードする。
+pathnameのイメージフォーマットをロードする。  
 imageオブジェクトまたは読み込みに失敗した場合はnilが返る。
 
     close-image image
-imageオブジェクトを解放する。
+imageオブジェクトを解放する。  
 bind-gltexでバインディングしたgl-textureは自動的に解放されない。
 
     bind-gltex image
-imageをカレントのGLコンテキストにテクスチャとしてバインドする。
-バインド成功した場合、返り値はGLのテクスチャ番号、失敗した場合はnilが返る。
+imageをカレントのGLコンテキストにテクスチャとしてバインドする。  
+バインド成功した場合、返り値はGLのテクスチャ番号、失敗した場合はnilが返る。  
 初回のバインド時にはgen-textureが発生する。
 
     load-font pathname ptsize index
-pathnameのフォント(.ttf)をロードする。
+pathnameのフォント(.ttf)をロードする。  
 fontオブジェクトまたは読み込みに失敗した場合はnilが返る。
 
     font-attribute attr font (&rest value)
-fontのスタイルを取得・設定する。
-attrには:style :outline :hinting :kerningが指定できる。
+fontのスタイルを取得・設定する。  
+attrには:style :outline :hinting :kerningが指定できる。  
 valueが指定された場合は、新しい属性としてvalueが設定される。
 * :style - 以下のキーワードの組み合わせリスト
     * :bold
@@ -182,7 +186,7 @@ valueが指定された場合は、新しい属性としてvalueが設定され�
 fontオブジェクトを解放する。
 
     render-text render-mode font text color
-fontからレンダリング結果のimageオブジェクトを生成する。
+fontからレンダリング結果のimageオブジェクトを生成する。  
 render-modeは:solid :shaded :blendedが指定できる。
 
 ###Input (Required init with :joystick)
@@ -206,21 +210,21 @@ render-modeは:solid :shaded :blendedが指定できる。
 オーディオデバイスの使用を開始する。
 
     load-wave pathname
-pathnameの音声ファイルをロードする
+pathnameの音声ファイルをロードする。  
 sampleオブジェクトまたは、音声ファイルの読み込みに失敗した場合はnilが返る。
 
     close-sample sample
 音声ファイルを解放する。
 
     channels count
-ミキシングのチャンネル数を設定する。
+ミキシングのチャンネル数を設定する。  
 返り値は実際に用意できたチャンネル数。
 
     volume channel volume
 チャンネルのボリュームを設定する。
 
     play channel sample loops ms
-チャンネルにサンプルを割り当てて再生する。
+チャンネルにサンプルを割り当てて再生する。  
 msが指定された場合はフェードイン開始する。
 
     pause channel
@@ -237,7 +241,7 @@ msが指定された場合はフェードアウト終了する。
 チャンネルが再生中か判別する。
 
     load-music pathname
-pathnameから音楽ファイルをロードする。
+pathnameから音楽ファイルをロードする。  
 musicオブジェクトまたは読み込みに失敗した場合はnilが返る。
 
     close-music music

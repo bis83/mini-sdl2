@@ -68,6 +68,20 @@ keysにはevent-typeによって異なるキーワード引数が設定される
     * :timestamp - イベントのタイムスタンプ値
     * :window-id - windowのID
     * :win-event - WindowEventを識別するシンボル
+        * :shown 
+        * :hidden
+        * :exposed
+        * :moved
+        * :resized
+        * :size-changed
+        * :minimized
+        * :maximized
+        * :restored
+        * :enter
+        * :leave
+        * :focus-gained
+        * :focus-lost
+        * :close
     * :data1 - WindowEventのパラメータ
     * :data2 - WindowEventのパラメータ
 * :keyboard
@@ -144,7 +158,19 @@ keysにはevent-typeによって異なるキーワード引数が設定される
 ###Video (Required init with :video)
 #### with-window
     sdl2:with-window (name &key title x y w h flags) &body body
-SDL2ウィンドウを生成する。
+SDL2ウィンドウを生成する。  
+* :flags
+    * :fullscreen
+    * :opengl
+    * :shown
+    * :borderless
+    * :resizable
+    * :minimized
+    * :maximized
+    * :input-grabbed
+    * :input-focus
+    * :mouse-focus
+    * :fullscreen-desktop
 
 ####with-context
     sdl2:with-context name win &body body
@@ -186,7 +212,7 @@ fontオブジェクトまたは読み込みに失敗した場合はnilが返る�
 fontオブジェクトを解放する。
 
 #### font-attribute
-    sdl2:font-attribute attr font (&rest value)
+    sdl2:font-attribute attr font &rest value
 fontのスタイルを取得・設定する。  
 attrには:style :outline :hinting :kerningが指定できる。  
 valueが指定された場合は、新しい属性としてvalueが設定される。

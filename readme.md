@@ -216,30 +216,6 @@ sampleオブジェクトまたは、音声ファイルの読み込みに失敗�
     close-sample sample
 音声ファイルを解放する。
 
-    channels count
-ミキシングのチャンネル数を設定する。  
-返り値は実際に用意できたチャンネル数。
-
-    volume channel volume
-チャンネルのボリュームを設定する。
-
-    play channel sample loops ms
-チャンネルにサンプルを割り当てて再生する。  
-msが指定された場合はフェードイン開始する。
-
-    pause channel
-チャンネルの再生を一時停止する。
-
-    resume channel
-チャンネルの再生を再開する。
-
-    halt channel ms
-チャンネルの再生を停止する。
-msが指定された場合はフェードアウト終了する。
-
-    playing channel
-チャンネルが再生中か判別する。
-
     load-music pathname
 pathnameから音楽ファイルをロードする。  
 musicオブジェクトまたは読み込みに失敗した場合はnilが返る。
@@ -247,26 +223,35 @@ musicオブジェクトまたは読み込みに失敗した場合はnilが返る
     close-music music
 musicオブジェクトを解放する。
 
-    volume-music volume
-音楽再生のボリュームを設定する。
+    channels count
+ミキシングのチャンネル数を設定する。  
+返り値は実際に用意できたチャンネル数。
 
-    play-music music loops ms position
-音楽再生を開始する。
+    volume channel-or-music volume
+チャンネルのボリュームを設定する。  
+channel-or-musicが:musicの場合は、音楽再生のボリュームを設定する。
 
-    pause-music
-音楽再生を一時停止する。
+    play channel-or-music sample-or-music loops ms
+チャンネルにサンプルを割り当てて再生する。  
+msが指定された場合はフェードイン開始する。  
+channel-or-musicが:musicの場合、音楽再生を開始する。
 
-    resume-music
-音楽再生を再開する。
+    pause channel-or-music
+チャンネルの再生を一時停止する。  
+channel-or-musicが:musicの場合、音楽再生を一時停止する。
 
-    rewind-music
-音楽を先頭まで巻き戻す。
+    resume channel-or-music
+チャンネルの再生を再開する。  
+channel-or-musicが:musicの場合、音楽再生を一時停止する。
 
-    halt-music ms
-音楽再生を停止する。
+    halt channel-or-music ms
+チャンネルの再生を停止する。  
+msが指定された場合はフェードアウト終了する。  
+channel-or-musicが:musicの場合、音楽再生を停止する。
 
-    playing-music
-音楽再生中か判別する。
+    playing channel-or-music
+チャンネルが再生中か判別する。  
+channel-or-musicが:musicの場合、音楽再生中か判別する。
 
 ##Sample Code
     ; On Window Event

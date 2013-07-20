@@ -93,12 +93,12 @@
             ,@body
             ,(if no-swap nil `(%swap-window ,win)))))
 
-(defmacro load-image (path)
+(defmacro %load-image (path)
   (let ((name (gensym)))
     `(%with-rbop-from-file (,name ,path)
       (%null-pointer-to-nil (%img-load-rw ,name 0)))))
 
-(defmacro close-image (image)
+(defmacro %close-image (image)
   `(%free-surface ,image))
 
 (defmacro load-font (path size)
@@ -124,7 +124,7 @@
       (if value `(%ttf-set-font-kerning ,font ,(if (car value) 1 0))
                 `(> (%ttf-get-dont-kerning ,font) 0)))))
 
-(defmacro render-text
+(defmacro %render-text
   (mode font text &optional (fr 255) (fg 255) (fb 255) (fa 255)
                             (br 0) (bg 0) (bb 0) (ba 0))
   (case mode
@@ -169,10 +169,7 @@
     with-context
     with-window-and-context
     begin-frame
-    load-image
-    close-image
     load-font
     close-font
-    font-attribute
-    render-text))
+    font-attribute))
 

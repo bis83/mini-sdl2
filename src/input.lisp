@@ -20,6 +20,8 @@
   (joystick :pointer))
 (defcfun ("SDL_JoystickNumHats" %joystick-num-hats) :int
   (joysitck :pointer))
+(defcfun ("SDL_GetKeyFromName" %get-key-from-name) :int
+  (name :string))
 
 (defparameter *joystick-list* ())
 
@@ -52,11 +54,15 @@
   (loop for joy in *joystick-list*
     collect (%joystick-index joy)))
 
+(defmacro keysym (keyname)
+  (%get-key-from-name keyname))
+
 (export
   '(num-joysticks
     joystick-style
     joystick-open
     joystick-opened
     joystick-close
-    list-active-joysticks))
+    list-active-joysticks
+    keysym))
 

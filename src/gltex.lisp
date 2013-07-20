@@ -33,7 +33,7 @@
 (defconstant +gl-linear+ #x2601)
 (defconstant +gl-unsigned-byte+ #x1401)
 
-(defun bind-gltex (image)
+(defun %bind-gltex (image)
   (let* ((fmt (%surface-value image :format))
          (bytes-per-pixel (%pixel-format-value fmt :bytes-per-pixel))
          (rmask (%pixel-format-value fmt :rmask))
@@ -52,5 +52,17 @@
         +gl-texture-2d+ 0 bytes-per-pixel w h 0 glfmt +gl-unsigned-byte+ pixels)
       (mem-ref tex :uint))))
 
-(export 'bind-gltex)
+(defmacro gen-teximage (path &aux (image (gensym)))
+  `(let ((,image (%load-image ,path)))
+    (unwind-protect (%bind-gltex ,image)
+      (%close-image ,image))))
+
+(defmacro gen-texfont (&rest args &aux (image (gensym)))
+  `(let ((,image (%render-text ,@args)))
+    (unwind-protect (%bind-gltex ,image)
+      (%close-image ,image))))
+
+(export 
+  '(gen-teximage
+    gen-texfont))
 

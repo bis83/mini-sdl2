@@ -64,14 +64,16 @@
                    data1 `(%window-event-value ,handle :data1)
                    data2 `(%window-event-value ,handle :data2))))
     ((:keyboard)
-      (destructuring-bind (handle &key event timestamp window-id state repeat keysym) spec
+      (destructuring-bind (handle &key event timestamp window-id state repeat keysym keymod) spec
         (%make-let body
                    event `(%event-type-symbol (%keyboard-event-value ,handle :type))
                    timestamp `(%keyboard-event-value ,handle :timestamp)
                    window-id `(%keyboard-event-value ,handle :window-id)
                    state `(%keyboard-event-value ,handle :state)
                    repeat `(%keyboard-event-value ,handle :repeat)
-                   keysym `(%keysym-value (%keyboard-event-pointer ,handle :keysym) :keycode))))
+                   keysym `(%keysym-value (%keyboard-event-pointer ,handle :keysym) :keycode)
+                   keymod `(%keymod-symbols
+                            (%keysym-value (%keyboard-event-pointer ,handle :keysym) :mod)))))
     ((:text-editing)
       (destructuring-bind (handle &key event timestamp window-id text start length) spec
         (%make-let body

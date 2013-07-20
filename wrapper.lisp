@@ -151,6 +151,21 @@
 
 ;;; Keyboard
 
+(%defbitfield keymod (:value %keymod-value
+                      :symbols %keymod-symbols)
+  (:lshift   #x0001)
+  (:rshift   #x0002)
+  (:lctrl    #x0040)
+  (:rctrl    #x0080)
+  (:lalt     #x0100)
+  (:ralt     #x0200)
+  (:lgui     #x0400)
+  (:rgui     #x0800)
+  (:num      #x1000)
+  (:caps     #x2000)
+  (:mode     #x4000)
+  (:reserved #x8000))
+
 (%defstruct keysym (:value %keysym-value
                     :pointer %keysym-pointer)
   (:scancode :uint32)

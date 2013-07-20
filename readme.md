@@ -90,7 +90,19 @@ keysにはevent-typeによって異なるキーワード引数が設定される
     * :window-id - windowのID
     * :state - :pressed または :released
     * :repeat - リピート判別値
-    * :keysym - キーの識別シンボル
+    * :keysym - キーの識別コード
+    * :keymod - キー入力時のMODキー列
+        * :lshift
+        * :rshift
+        * :lctrl
+        * :rctrl
+        * :lalt
+        * :ralt
+        * :lgui
+        * :rgui
+        * :num
+        * :caps
+        * :mode
 * :text-editing
     * :event - :text-editing
     * :timestamp - イベントのタイムスタンプ値
@@ -187,22 +199,6 @@ SDL2ウィンドウとGL描画コンテキストを生成する。
 フレームの終了時にwinのバックバッファがスワップされる。  
 no-swapをtに設定した場合、フレーム終了時にスワップしない。
 
-#### load-image
-    sdl2:load-image pathname
-pathnameのイメージフォーマットをロードする。  
-imageオブジェクトまたは読み込みに失敗した場合はnilが返る。
-
-#### close-image
-    sdl2:close-image image
-imageオブジェクトを解放する。  
-bind-gltexでバインディングしたgl-textureは自動的に解放されない。
-
-#### bind-gltex
-    sdl2:bind-gltex image
-imageをカレントのGLコンテキストにテクスチャとしてバインドする。  
-GLコンテキストを利用するため、begin-frame内で呼び出さなければならない。  
-返り値はGLテクスチャのハンドル番号。
-
 #### load-font
     sdl2:load-font pathname ptsize index
 pathnameのフォント(.ttf)をロードする。  
@@ -230,9 +226,14 @@ valueが指定された場合は、新しい属性としてvalueが設定され�
     * :none
 * :kerning - tまたはnil
 
-#### render-text
-    sdl2:render-text render-mode font text &optional fr fg fb fa br bg bb ba
-fontからレンダリング結果のimageオブジェクトを生成する。  
+#### gen-teximage
+    sdl2:gen-teximage pathname
+pathnameのイメージをGLテクスチャとしてロードする。  
+返り値はGLオブジェクトのハンドル番号。
+
+#### gen-texfont
+    sdl2:gen-texfont render-mode font text &optional fr fg fb fa br bg bb ba
+fontからレンダリング結果からGLテクスチャを生成する。  
 render-modeは:solid :shaded :blendedが指定できる。  
 fr-faはフォアカラー、br-baはバックカラーの各要素(0-255)となる。
 
@@ -261,6 +262,10 @@ fr-faはフォアカラー、br-baはバックカラーの各要素(0-255)とな
 #### list-active-joysticks
     sdl2:list-active-joysticks
 使用中のジョイスティックIDのリストを取得する。
+
+#### keysym
+    sdl2:keysym string
+指定した名前のキーコードに展開されるマクロ。
 
 ###Audio (Required init with :audio)
 #### with-audio

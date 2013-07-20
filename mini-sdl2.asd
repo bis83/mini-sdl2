@@ -5,7 +5,7 @@
 (in-package :mini-sdl2-asd)
 
 (asdf:defsystem :mini-sdl2
-  :version "0.9"
+  :version "1.0"
   :author "BIS"
   :license "zlib license"
   :depends-on (:cffi)
